@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { registerUser } from '../services/apiService';
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import '/src/styles/Adminpage.css'
 
 function AdminPage() {
     const [nombre, setNombre] = useState('');
@@ -16,6 +17,13 @@ function AdminPage() {
 
     const { login } = useContext(AuthContext);  // Llamamos login del contexto para autenticación automática
     const navigate = useNavigate();
+
+    const { logout } = useContext(AuthContext);
+
+    const handleLogout = () => {
+        logout();
+        navigate('/'); // Redirige a la página principal
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -52,6 +60,7 @@ function AdminPage() {
     return (
         <div className="adminpage">
             <h1>Página de Administrador</h1>
+            <button onClick={handleLogout}>Cerrar Sesión</button>
             <form className="user-form" onSubmit={handleSubmit}>
                 {/* Campos de registro como antes */}
                 <div>

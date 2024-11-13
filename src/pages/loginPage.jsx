@@ -3,6 +3,8 @@ import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../services/apiService';
+import '/src/styles/Loginpage.css'
+
 
 function LoginPage() {
     const [correo, setCorreo] = useState('');
@@ -13,17 +15,13 @@ function LoginPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const loginRequest = { correo, password };
-        console.log("Intentando iniciar sesión con:", loginRequest);
 
         try {
             const response = await loginUser(loginRequest);
-            console.log("Respuesta del servidor al iniciar sesión:", response);
 
             if (response.token && response.role) {
                 login({ token: response.token, role: response.role });
-                console.log("Inicio de sesión exitoso, rol:", response.role);
             } else {
-                console.log("Error en la autenticación: token o rol no presentes en la respuesta.");
                 alert('Error en la autenticación');
             }
         } catch (error) {
@@ -33,9 +31,7 @@ function LoginPage() {
     };
 
     useEffect(() => {
-        console.log("Verificando autenticación en useEffect:", authData);
         if (authData.isAuthenticated && authData.role) {
-            console.log("Redirigiendo según rol:", authData.role);
             switch (authData.role) {
                 case 'admin':
                     navigate("/admin");
@@ -52,30 +48,28 @@ function LoginPage() {
 
     return (
         <div className="login-page">
-            <div className="login-container">
-                <h1>Iniciar Sesión</h1>
-                <form className="login-form" onSubmit={handleSubmit}>
-                    <div>
-                        <label>Correo:</label>
-                        <input
-                            type="text"
-                            value={correo}
-                            onChange={(e) => setCorreo(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label>Contraseña:</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button type="submit">Ingresar</button>
-                </form>
-            </div>
+            <h1>Iniciar Sesión</h1>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>Correo:</label>
+                    <input
+                        type="text"
+                        value={correo}
+                        onChange={(e) => setCorreo(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Contraseña:</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <button type="submit">Ingresar</button>
+            </form>
         </div>
     );
 }

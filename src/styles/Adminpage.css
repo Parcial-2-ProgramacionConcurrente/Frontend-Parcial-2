@@ -1,0 +1,77 @@
+/* src/styles/adminPage.css */
+.admin-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #1b1b1b;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+}
+
+.admin-page h1 {
+    font-size: 2.5rem;
+    color: #ffc107;
+    margin-bottom: 20px;
+}
+
+.admin-page .button1 {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff4b5c;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.admin-page .button1:hover {
+    background-color: #e63946;
+}
+
+.user-form {
+    width: 80%;
+    max-width: 500px;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.user-form label {
+    display: block;
+    font-size: 1rem;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.user-form input,
+.user-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #444;
+    color: white;
+}
+
+.user-form button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffc107;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.user-form button:hover {
+    background-color: #e0a800;
+}

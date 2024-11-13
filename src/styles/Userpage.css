@@ -1,0 +1,34 @@
+/* src/styles/userPage.css */
+.user-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #222;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+}
+
+.user-page h1 {
+    font-size: 2.5rem;
+    color: #ffc107;
+    margin-bottom: 20px;
+}
+
+.user-page .button1 {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff4b5c;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.user-page .button1:hover {
+    background-color: #e63946;
+}
