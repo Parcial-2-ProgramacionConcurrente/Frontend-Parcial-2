@@ -3,24 +3,27 @@ import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../services/apiService';
-import '../styles/login.css';
 
 function LoginPage() {
-    const [nombreOrCorreo, setNombreOrCorreo] = useState('');
+    const [correo, setCorreo] = useState('');
     const [password, setPassword] = useState('');
     const { authData, login } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const loginRequest = { nombreOrCorreo, password };
+        const loginRequest = { correo, password };
+        console.log("Intentando iniciar sesión con:", loginRequest);
 
         try {
             const response = await loginUser(loginRequest);
+            console.log("Respuesta del servidor al iniciar sesión:", response);
 
             if (response.token && response.role) {
                 login({ token: response.token, role: response.role });
+                console.log("Inicio de sesión exitoso, rol:", response.role);
             } else {
+                console.log("Error en la autenticación: token o rol no presentes en la respuesta.");
                 alert('Error en la autenticación');
             }
         } catch (error) {
@@ -30,7 +33,9 @@ function LoginPage() {
     };
 
     useEffect(() => {
+        console.log("Verificando autenticación en useEffect:", authData);
         if (authData.isAuthenticated && authData.role) {
+            console.log("Redirigiendo según rol:", authData.role);
             switch (authData.role) {
                 case 'admin':
                     navigate("/admin");
@@ -51,11 +56,11 @@ function LoginPage() {
                 <h1>Iniciar Sesión</h1>
                 <form className="login-form" onSubmit={handleSubmit}>
                     <div>
-                        <label>Nombre de Usuario o Correo:</label>
+                        <label>Correo:</label>
                         <input
                             type="text"
-                            value={nombreOrCorreo}
-                            onChange={(e) => setNombreOrCorreo(e.target.value)}
+                            value={correo}
+                            onChange={(e) => setCorreo(e.target.value)}
                             required
                         />
                     </div>

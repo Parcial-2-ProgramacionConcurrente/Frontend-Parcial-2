@@ -1,7 +1,6 @@
 // src/components/userPage.jsx
 import React, {useContext} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import '../styles/userPage.css';
 import {AuthContext} from "../context/AuthContext";
 
 

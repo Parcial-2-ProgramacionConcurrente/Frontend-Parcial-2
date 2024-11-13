@@ -1,10 +1,8 @@
-// src/components/AdminPage.jsx
-import React, {useContext, useState} from 'react';
+// src/pages/AdminPage.jsx
+import React, { useContext, useState } from 'react';
 import { registerUser } from '../services/apiService';
-import '../styles/adminPage.css';
-import '../styles/styles.css';
-import {AuthContext} from "../context/AuthContext";
-import {useNavigate} from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function AdminPage() {
     const [nombre, setNombre] = useState('');
@@ -16,13 +14,8 @@ function AdminPage() {
     const [password, setPassword] = useState('');
     const [rolNombre, setRolNombre] = useState('user'); // Valor por defecto para rol
 
-    const { logout } = useContext(AuthContext);
+    const { login } = useContext(AuthContext);  // Llamamos login del contexto para autenticación automática
     const navigate = useNavigate();
-
-    const handleLogout = () => {
-        logout();      // Llama a la función logout del contexto
-        navigate('/'); // Redirige a la página de inicio de sesión
-    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -31,24 +24,24 @@ function AdminPage() {
             apellido1,
             apellido2,
             correo,
-            telefono: parseInt(telefono), // Convertir a número
+            telefono: parseInt(telefono),
             direccion,
             password,
             rolNombre
         };
 
         registerUser(registerData)
-            .then(() => {
-                alert('Usuario registrado exitosamente');
-                // Limpiar formulario después de enviar
-                setNombre('');
-                setApellido1('');
-                setApellido2('');
-                setCorreo('');
-                setTelefono('');
-                setDireccion('');
-                setPassword('');
-                setRolNombre('user');
+            .then((response) => {
+                if (response.data.token && response.data.role) {
+                    login({ token: response.data.token, role: response.data.role });
+                    if (response.data.role === 'admin') {
+                        navigate("/admin");
+                    } else if (response.data.role === 'user') {
+                        navigate("/user");
+                    }
+                } else {
+                    alert('Error en el registro');
+                }
             })
             .catch(error => {
                 console.error('Error al registrar usuario:', error);
@@ -59,9 +52,8 @@ function AdminPage() {
     return (
         <div className="adminpage">
             <h1>Página de Administrador</h1>
-            <button1 onClick={handleLogout} className="button1">Log Out</button1>
-
             <form className="user-form" onSubmit={handleSubmit}>
+                {/* Campos de registro como antes */}
                 <div>
                     <label>Nombre:</label>
                     <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} required/>

@@ -11,6 +11,7 @@ export function AuthProvider({ children }) {
     });
 
     const login = (data) => {
+        console.log("Datos de inicio de sesión recibidos en AuthContext:", data);
         setAuthData({
             isAuthenticated: true,
             token: data.token,
@@ -20,6 +21,7 @@ export function AuthProvider({ children }) {
     };
 
     const logout = () => {
+        console.log("Cerrando sesión");
         setAuthData({
             isAuthenticated: false,
             token: null,
