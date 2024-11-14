@@ -21,3 +21,12 @@ export const registerUser = (registerData) => {
 export const getEvents = () => {
     return axios.get(`${API_BASE_URL}/eventos`);
 };
+
+// Nueva función para obtener los mensajes recibidos de RabbitMQ
+export const getReceivedMessages = () => {
+    return axios.get(`${API_BASE_URL}/api/messages/recibidos`, {
+        headers: {
+            'Accept': 'text/event-stream'
+        }
+    });
+};
