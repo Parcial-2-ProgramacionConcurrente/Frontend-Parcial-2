@@ -9,8 +9,7 @@ function Homepage() {
     return (
         <div className="homepage">
             <header className="homepage-header">
-                <img src="/src/images/gausss.webp" alt="Galton Board" className="homepage-image"/>
-                <h1>Bienvenido a la Fábrica de Campanas de Gauss</h1>
+                <h1>Fábrica de Campanas de Gauss</h1>
                 <p>Una simulación de la distribución normal a través del tablero de Galton.</p>
                 <div className="button-container">
                     <button onClick={() => navigate("/login")}>Iniciar Sesión</button>
@@ -42,3 +41,4 @@ function Homepage() {
 }
 
 export default Homepage;
+
