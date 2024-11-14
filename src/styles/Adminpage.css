@@ -46,13 +46,13 @@ html, body {
 .admin-page .button1 {
     position: fixed; /* Esto hace que el botón esté siempre en la esquina superior izquierda, incluso al hacer scroll */
     top: 20px;
-    left: 20px;
+    right: 20px;
     padding: 10px 20px;
     font-size: 1rem;
     border: none;
     border-radius: 5px;
     background-color: #ff4b5c;
-    color: white;
+    color: #ffffff;
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-top: 20px;
