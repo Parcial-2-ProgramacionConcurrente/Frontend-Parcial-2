@@ -1,4 +1,4 @@
-# Sistema de Monitoreo de la Maquina de Galton - FrontEnd (Spring WebFlux)
+# Sistema de Monitoreo de la Maquina de Galton - FrontEnd (React Node)
 
 # LINKS
 
