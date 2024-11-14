@@ -1,4 +1,4 @@
-# Sistema de Monitoreo de la Maquina de Galton - Backend (Spring WebFlux)
+# Sistema de Monitoreo de la Maquina de Galton - FrontEnd (Spring WebFlux)
 
 # LINKS
 
