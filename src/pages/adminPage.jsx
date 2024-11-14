@@ -60,7 +60,7 @@ function AdminPage() {
         <div className="admin-page">
             <Nieve /> {/* Add the Nieve component */}
             <h1>Página de Administrador</h1>
-            <button className="button1" onClick={handleLogout}>Cerrar Sesión</button>
+            <button className="button1" onClick={handleLogout}>Log Out</button>
 
             <div className="adminpage-content">
                 {/* Formulario de Registro de Usuario */}
@@ -109,3 +109,4 @@ function AdminPage() {
         </div>
     );
 }
+export default AdminPage;
