@@ -1,50 +1,59 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
+import BackendGaltonBoard from "./BackendGaltonBoard.jsx";
+import axios from 'axios';
+import { api } from '/src/services/apiService.js'; // Importa correctamente
+
 
 const GaltonBoard = () => {
     const sceneRef = useRef(null);
     const engineRef = useRef(Matter.Engine.create());
     const runnerRef = useRef(null);
     const [simulationStarted, setSimulationStarted] = useState(false);
+    const [distribution, setDistribution] = useState(null);
+    const [simulationFinished, setSimulationFinished] = useState(false);
+    const [galtonBoardId, setGaltonBoardId] = useState(null); // Nuevo estado para almacenar el galtonBoardId
 
     // Variables compartidas
     const pegRadius = 5;
     const ballRadius = 5;
-    const offsetX = 400; // Centro del tablero en el eje X
-    const offsetY = 100; // Offset inicial en el eje Y
+    const offsetX = 400;
+    const offsetY = 100;
     const horizontalSpacing = 50;
     const verticalSpacing = 50;
-    const numberOfRows = 10; // Número de filas de clavos
+    const numberOfRows = 10;
     const boardWidth = 600;
     const boardHeight = 500;
+    const numberOfContainers = numberOfRows + 1;
+    const containerWidth = boardWidth / numberOfContainers - 5;
+    const containerHeight = 100;
+    const containerOffsetY = offsetY + boardHeight + containerHeight / 2 + 50;
 
     useEffect(() => {
         const engine = engineRef.current;
         const world = engine.world;
 
-        // Configurar la gravedad
-        engine.gravity.y = 1; // Valor estándar de gravedad
+        engine.gravity.y = 1.12;
 
-        // Crear el renderizador
         const render = Matter.Render.create({
             element: sceneRef.current,
             engine: engine,
             options: {
                 width: 800,
-                height: 800, // Aumenté la altura para dar más espacio
+                height: 800,
                 wireframes: false,
                 background: '#ffffff',
             },
         });
 
-        // Agregar los muros alrededor del tablero (excepto en la parte superior)
         const wallThickness = 10;
+        const extendedBoardHeight = boardHeight + 200;
 
         const leftWall = Matter.Bodies.rectangle(
             offsetX - boardWidth / 2 - wallThickness / 2,
-            offsetY + boardHeight / 2,
+            offsetY + extendedBoardHeight / 2,
             wallThickness,
-            boardHeight,
+            extendedBoardHeight,
             {
                 isStatic: true,
                 label: 'Wall',
@@ -54,9 +63,9 @@ const GaltonBoard = () => {
 
         const rightWall = Matter.Bodies.rectangle(
             offsetX + boardWidth / 2 + wallThickness / 2,
-            offsetY + boardHeight / 2,
+            offsetY + extendedBoardHeight / 2,
             wallThickness,
-            boardHeight,
+            extendedBoardHeight,
             {
                 isStatic: true,
                 label: 'Wall',
@@ -64,23 +73,10 @@ const GaltonBoard = () => {
             }
         );
 
-        const bottomWall = Matter.Bodies.rectangle(
-            offsetX,
-            offsetY + boardHeight + wallThickness / 2,
-            boardWidth + wallThickness * 2,
-            wallThickness,
-            {
-                isStatic: true,
-                label: 'Floor',
-                render: { fillStyle: '#000000' },
-            }
-        );
+        Matter.World.add(world, [leftWall, rightWall]);
 
-        Matter.World.add(world, [leftWall, rightWall, bottomWall]);
-
-        // Agregar clavos en forma de pirámide
-        for (let row = 0; row < numberOfRows; row++) {
-            const pegsInRow = row + 1; // Incrementa el número de clavos por fila
+        for (let row = 1; row < numberOfRows; row++) {
+            const pegsInRow = row + 1;
             const rowOffset = (pegsInRow - 1) * horizontalSpacing / 2;
 
             for (let col = 0; col < pegsInRow; col++) {
@@ -96,27 +92,22 @@ const GaltonBoard = () => {
             }
         }
 
-        // Agregar contenedores opacos debajo de los clavos
-        const numberOfContainers = numberOfRows + 1; // Un contenedor más que el número de filas
-        const containerWidth = boardWidth / numberOfContainers - 5; // Reducir el ancho para añadir separación
-        const containerHeight = 100;
-        const containerOffsetY = offsetY + boardHeight + containerHeight / 2 + 50; // Mover los contenedores más abajo
-
+        const containers = [];
         for (let i = 0; i < numberOfContainers; i++) {
             const x = offsetX - boardWidth / 2 + i * (containerWidth + 5) + containerWidth / 2;
             const y = containerOffsetY;
 
             const container = Matter.Bodies.rectangle(x, y, containerWidth, containerHeight, {
                 isStatic: true,
-                label: 'Container',
+                label: `Container_${i}`,
                 render: {
                     fillStyle: '#000000',
                 },
             });
             Matter.World.add(world, container);
+            containers.push(container);
         }
 
-        // Agregar un suelo invisible para evitar que las bolas caigan indefinidamente
         const invisibleFloor = Matter.Bodies.rectangle(
             offsetX,
             offsetY + boardHeight + containerHeight + 100,
@@ -124,18 +115,19 @@ const GaltonBoard = () => {
             10,
             {
                 isStatic: true,
-                isSensor: true, // No colisiona, solo detecta
+                isSensor: true,
                 label: 'InvisibleFloor',
             }
         );
         Matter.World.add(world, invisibleFloor);
 
-        // Inicializar el motor y el renderizado usando Matter.Runner
         runnerRef.current = Matter.Runner.create();
         Matter.Runner.run(runnerRef.current, engine);
         Matter.Render.run(render);
 
-        // Limpieza al desmontar el componente
+        // Obtener el galtonBoardId antes de iniciar la simulación
+        fetchGaltonBoardId();
+
         return () => {
             Matter.Render.stop(render);
             Matter.World.clear(world);
@@ -146,7 +138,37 @@ const GaltonBoard = () => {
         };
     }, []);
 
-    // Función para iniciar la simulación al hacer clic en el botón
+    // Nueva función para obtener el galtonBoardId desde el backend
+    const fetchGaltonBoardId = async () => {
+        try {
+            const response = await api.get('/fabricas'); // Usa 'api' en lugar de 'axios'
+            if (response.data && response.data.length > 0) {
+                const fabrica = response.data[0]; // Tomamos la primera fábrica
+                const galtonBoardId = await getGaltonBoardIdByFabricaId(fabrica.id);
+                setGaltonBoardId(galtonBoardId);
+            } else {
+                console.error('No se encontraron fábricas en el backend.');
+            }
+        } catch (error) {
+            console.error('Error fetching fabrica from backend:', error);
+        }
+    };
+
+    // Función para obtener el galtonBoardId utilizando el fabricaId
+    const getGaltonBoardIdByFabricaId = async (fabricaId) => {
+        try {
+            const response = await api.get(`/fabricas/${fabricaId}/galtonboard`); // Usa 'api' y ajusta la ruta
+            if (response.data && response.data.id) {
+                return response.data.id;
+            } else {
+                console.error('No se pudo obtener el galtonBoardId para la fábrica:', fabricaId);
+            }
+        } catch (error) {
+            console.error('Error fetching galtonBoardId from backend:', error);
+        }
+        return null;
+    };
+
     const startSimulation = () => {
         if (simulationStarted) return;
         setSimulationStarted(true);
@@ -156,7 +178,7 @@ const GaltonBoard = () => {
 
         let ballCount = 0;
         const maxBalls = 100;
-        const dropInterval = 100; // Milisegundos entre cada bola
+        const dropInterval = 100;
 
         const intervalId = setInterval(() => {
             if (ballCount >= maxBalls) {
@@ -173,12 +195,21 @@ const GaltonBoard = () => {
             ballCount++;
         }, dropInterval);
 
-        // Hacer desaparecer las bolas al tocar los contenedores
+
+        const fetchDistributionFromBackend = async (galtonBoardId) => {
+            try {
+                const response = await axios.post(`/api/galtonboard/mostrarDistribucion?galtonBoardId=${galtonBoardId}`);
+                setDistribution(response.data);
+            } catch (error) {
+                console.error('Error fetching distribution from backend:', error);
+            }
+        };
+
         const handleCollision = (event) => {
             event.pairs.forEach(({ bodyA, bodyB }) => {
                 if (
-                    (bodyA.label === 'Ball' && bodyB.label === 'Container') ||
-                    (bodyB.label === 'Ball' && bodyA.label === 'Container')
+                    (bodyA.label === 'Ball' && bodyB.label.startsWith('Container')) ||
+                    (bodyB.label === 'Ball' && bodyA.label.startsWith('Container'))
                 ) {
                     const ball = bodyA.label === 'Ball' ? bodyA : bodyB;
                     Matter.World.remove(world, ball);
@@ -188,22 +219,63 @@ const GaltonBoard = () => {
 
         Matter.Events.on(engine, 'collisionStart', handleCollision);
 
-        // Limpieza cuando la simulación termine
         const cleanup = () => {
             clearInterval(intervalId);
             Matter.Events.off(engine, 'collisionStart', handleCollision);
+            setSimulationFinished(true);
+
+            if (galtonBoardId) {
+                fetchDistributionFromBackend(galtonBoardId);
+            } else {
+                console.error('No galtonBoardId available.');
+            }
         };
 
-        // Configurar limpieza cuando se desmonta el componente o la simulación termina
-        setTimeout(cleanup, maxBalls * dropInterval + 5000); // Espera adicional para asegurar que todas las bolas hayan caído
+        setTimeout(cleanup, maxBalls * dropInterval + 5000);
     };
 
+
+
     return (
-        <div>
-            {!simulationStarted && (
-                <button onClick={startSimulation}>Iniciar producción</button>
+        <div style={{ display: 'flex' }}>
+            <div>
+                {!simulationStarted && (
+                    <button onClick={startSimulation} disabled={!galtonBoardId}>
+                        {galtonBoardId ? 'Iniciar producción' : 'Cargando...'}
+                    </button>
+                )}
+                <div ref={sceneRef} />
+                {/* Mostrar solo los números debajo de cada contenedor */}
+                {simulationFinished && distribution && (
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                        {Object.keys(distribution)
+                            .sort((a, b) => {
+                                const numA = parseInt(a.replace('contenedor_', ''));
+                                const numB = parseInt(b.replace('contenedor_', ''));
+                                return numA - numB;
+                            })
+                            .map((key, index) => (
+                                <div
+                                    key={index}
+                                    style={{
+                                        width: containerWidth,
+                                        textAlign: 'center',
+                                        margin: '0 2.5px',
+                                        color: '#000000',
+                                    }}
+                                >
+                                    {distribution[key]}
+                                </div>
+                            ))}
+                    </div>
+                )}
+            </div>
+            {/* Sección para mostrar el Galton Board del backend */}
+            {simulationFinished && distribution && (
+                <div style={{ marginLeft: '50px' }}>
+                    <BackendGaltonBoard distribution={distribution} />
+                </div>
             )}
-            <div ref={sceneRef} />
         </div>
     );
 };

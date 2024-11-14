@@ -14,6 +14,11 @@ export const loginUser = async (credentials) => {
     }
 };
 
+export const api = axios.create({
+    baseURL: API_BASE_URL, // Reemplaza con la URL de tu backend
+});
+
+
 export const registerUser = (registerData) => {
     return axios.post(`${API_BASE_URL}/api/auth/register`, registerData);
 };

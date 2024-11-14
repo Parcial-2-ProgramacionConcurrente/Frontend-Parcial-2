@@ -22,7 +22,6 @@ function UserPage() {
             <div className="banner-container">
             </div>
             <GaltonBoard/>
-            <h1>Página de Usuario</h1>
             <button onClick={handleLogout} className="button1"> Log Out</button>
 
         </div>

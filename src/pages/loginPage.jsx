@@ -3,7 +3,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../services/apiService';
-import '/src/styles/Loginpage.css'
+import '../styles/Loginpage.css';
 
 
 function LoginPage() {
@@ -48,6 +48,7 @@ function LoginPage() {
 
     return (
         <div className="login-page">
+
             <h1>Iniciar Sesión</h1>
             <form onSubmit={handleSubmit}>
                 <div>

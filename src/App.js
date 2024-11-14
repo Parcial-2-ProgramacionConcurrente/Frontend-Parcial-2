@@ -7,8 +7,6 @@ import RegisterPage from "./pages/RegisterPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
 import UserPage from "./pages/UserPage.jsx";
 import ProtectedRoute from './components/ProtectedRoute.jsx';
-import GaltonBoard from "./components/GaltonBoard.jsx";
-
 
 function App() {
     return (
@@ -21,7 +19,7 @@ function App() {
                     path="/user"
                     element={
                         <ProtectedRoute requiredRole="user">
-                            <UserPage />
+                            <UserPage/>
                         </ProtectedRoute>
                     }
                 />
