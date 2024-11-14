@@ -1,5 +1,7 @@
 // BackendGaltonBoard.jsx
 import React from 'react';
+import '/src/styles/BackendGaltonBoard.css'; // Importar el CSS
+
 
 const BackendGaltonBoard = ({ distribution }) => {
     // Calcular el máximo número de bolas para normalizar las barras si es necesario
@@ -31,11 +33,11 @@ const BackendGaltonBoard = ({ distribution }) => {
     }).join('');
 
     return (
-        <div style={{ fontFamily: 'monospace' }}>
+        <div className="backend-galton-board">
             <h3>Distribución de bolas en los contenedores:</h3>
             <pre>
                 {chartLines.map((line, index) => (
-                    <div key={index}>{line}</div>
+                    <div key={index} className="chart-line">{line}</div>
                 ))}
                 <hr />
                 {labels}

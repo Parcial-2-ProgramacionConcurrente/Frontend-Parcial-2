@@ -1,0 +1,28 @@
+/* src/styles/BackendGaltonBoard.css */
+.backend-galton-board {
+    font-family: 'Courier New', Courier, monospace;
+    color: #ffffff;
+}
+
+.backend-galton-board h3 {
+    font-size: 1.5rem;
+    color: #ffc107;
+    margin-bottom: 10px;
+}
+
+.backend-galton-board pre {
+    background-color: #333;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+.backend-galton-board .chart-line {
+    line-height: 1.2;
+}
+
+.backend-galton-board hr {
+    border: none;
+    border-top: 1px solid #555;
+    margin: 10px 0;
+}

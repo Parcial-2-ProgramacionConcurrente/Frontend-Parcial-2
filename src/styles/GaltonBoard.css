@@ -1,0 +1,63 @@
+/* src/styles/GaltonBoard.css */
+.galton-board-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+    background-color: #1b1b1b;
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+.galton-board-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.galton-board-button {
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffc107;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.galton-board-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+.galton-board-button:hover:enabled {
+    background-color: #e0a800;
+}
+
+.galton-board-scene {
+    width: 800px;
+    height: 800px;
+    background-color: #ffffff;
+    border: 2px solid #333;
+}
+
+.galton-board-distribution {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.galton-board-distribution-number {
+    width: 50px; /* Ajusta según sea necesario */
+    text-align: center;
+    margin: 0 2.5px;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.galton-board-backend {
+    margin-left: 50px;
+}
+

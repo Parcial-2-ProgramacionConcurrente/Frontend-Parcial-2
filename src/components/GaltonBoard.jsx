@@ -3,6 +3,8 @@ import Matter from 'matter-js';
 import BackendGaltonBoard from "./BackendGaltonBoard.jsx";
 import axios from 'axios';
 import { api } from '/src/services/apiService.js'; // Importa correctamente
+import '/src/styles/GaltonBoard.css'; // Importar el CSS
+
 
 
 const GaltonBoard = () => {
@@ -237,17 +239,21 @@ const GaltonBoard = () => {
 
 
     return (
-        <div style={{ display: 'flex' }}>
-            <div>
+        <div className="galton-board-container">
+            <div className="galton-board-left">
                 {!simulationStarted && (
-                    <button onClick={startSimulation} disabled={!galtonBoardId}>
+                    <button
+                        className="galton-board-button"
+                        onClick={startSimulation}
+                        disabled={!galtonBoardId}
+                    >
                         {galtonBoardId ? 'Iniciar producción' : 'Cargando...'}
                     </button>
                 )}
-                <div ref={sceneRef} />
+                <div ref={sceneRef} className="galton-board-scene" />
                 {/* Mostrar solo los números debajo de cada contenedor */}
                 {simulationFinished && distribution && (
-                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                    <div className="galton-board-distribution">
                         {Object.keys(distribution)
                             .sort((a, b) => {
                                 const numA = parseInt(a.replace('contenedor_', ''));
@@ -257,12 +263,7 @@ const GaltonBoard = () => {
                             .map((key, index) => (
                                 <div
                                     key={index}
-                                    style={{
-                                        width: containerWidth,
-                                        textAlign: 'center',
-                                        margin: '0 2.5px',
-                                        color: '#000000',
-                                    }}
+                                    className="galton-board-distribution-number"
                                 >
                                     {distribution[key]}
                                 </div>
@@ -272,7 +273,7 @@ const GaltonBoard = () => {
             </div>
             {/* Sección para mostrar el Galton Board del backend */}
             {simulationFinished && distribution && (
-                <div style={{ marginLeft: '50px' }}>
+                <div className="galton-board-backend">
                     <BackendGaltonBoard distribution={distribution} />
                 </div>
             )}

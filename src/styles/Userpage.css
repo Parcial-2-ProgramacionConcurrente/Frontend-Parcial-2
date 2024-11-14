@@ -1,23 +1,33 @@
-/* src/styles/userPage.css */
-.user-page {
+/* src/styles/Userpage.css */
+
+.userpage {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #222;
+    background-color: #1b1b1b;
     color: #ffffff;
-    text-align: center;
+    min-height: 100vh;
     padding: 20px;
 }
 
-.user-page h1 {
-    font-size: 2.5rem;
-    color: #ffc107;
+.userpage .banner-container {
+    width: 100%;
+    max-width: 1200px;
+    background-size: cover;
+    background-position: center;
+    height: 200px;
     margin-bottom: 20px;
+    border-radius: 10px;
 }
 
-.user-page .button1 {
+.userpage .galton-board-section {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+}
+
+.userpage .logout-button {
     padding: 10px 20px;
     font-size: 1rem;
     border: none;
@@ -29,6 +39,21 @@
     margin-top: 20px;
 }
 
-.user-page .button1:hover {
+.userpage .logout-button:hover {
     background-color: #e63946;
+}
+
+@media (max-width: 768px) {
+    .userpage {
+        padding: 10px;
+    }
+
+    .userpage .banner-container {
+        height: 150px;
+    }
+
+    .userpage .logout-button {
+        width: 100%;
+        margin-top: 15px;
+    }
 }
