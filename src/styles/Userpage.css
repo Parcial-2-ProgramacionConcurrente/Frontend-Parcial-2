@@ -1,5 +1,4 @@
 /* src/styles/Userpage.css */
-
 .userpage {
     display: flex;
     flex-direction: column;
@@ -8,6 +7,7 @@
     color: #ffffff;
     min-height: 100vh;
     padding: 20px;
+    position: relative;
 }
 
 .userpage .banner-container {
@@ -15,7 +15,7 @@
     max-width: 1200px;
     background-size: cover;
     background-position: center;
-    height: 200px;
+    height: auto;
     margin-bottom: 20px;
     border-radius: 10px;
 }
@@ -27,7 +27,7 @@
     justify-content: center;
 }
 
-.userpage .logout-button {
+.userpage .button1 {
     padding: 10px 20px;
     font-size: 1rem;
     border: none;
@@ -36,10 +36,12 @@
     color: #ffffff;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 20px;
+    position: absolute; /* Posiciona el botón absolutamente dentro de .userpage */
+    top: 20px; /* Separación desde la parte superior */
+    right: 20px; /* Separación desde la derecha */
 }
 
-.userpage .logout-button:hover {
+.userpage .button1:hover {
     background-color: #e63946;
 }
 
@@ -52,8 +54,9 @@
         height: 150px;
     }
 
-    .userpage .logout-button {
-        width: 100%;
-        margin-top: 15px;
+    .userpage .button1 {
+        width: auto;
+        top: 15px;
+        right: 15px;
     }
 }

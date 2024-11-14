@@ -1,7 +1,5 @@
-// BackendGaltonBoard.jsx
 import React from 'react';
 import '/src/styles/BackendGaltonBoard.css'; // Importar el CSS
-
 
 const BackendGaltonBoard = ({ distribution }) => {
     // Calcular el máximo número de bolas para normalizar las barras si es necesario
@@ -15,12 +13,12 @@ const BackendGaltonBoard = ({ distribution }) => {
             return numA - numB;
         });
 
-    // Construir las líneas para la representación vertical
+    // Construir las líneas para la representación vertical con bloques en lugar de asteriscos
     const chartLines = [];
     for (let i = maxBalls; i > 0; i--) {
         const line = sortedKeys.map((key) => {
             const value = distribution[key];
-            return value >= i ? ' * ' : '   ';
+            return value >= i ? ' █ ' : '   '; // Usar bloques sólidos para las barras
         }).join('');
         chartLines.push(line);
     }

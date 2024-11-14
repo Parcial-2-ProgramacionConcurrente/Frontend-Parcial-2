@@ -1,28 +1,43 @@
-/* src/styles/BackendGaltonBoard.css */
 .backend-galton-board {
     font-family: 'Courier New', Courier, monospace;
     color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
 }
 
 .backend-galton-board h3 {
     font-size: 1.5rem;
     color: #ffc107;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .backend-galton-board pre {
-    background-color: #333;
+    background-color: #2c2c2c;
     padding: 15px;
-    border-radius: 5px;
+    border-radius: 8px;
     overflow-x: auto;
+    font-size: 1.1rem;
+    color: #ffc107;
 }
 
 .backend-galton-board .chart-line {
     line-height: 1.2;
+    color: #00ff7f;
+    font-size: 1.2rem;
 }
+
 
 .backend-galton-board hr {
     border: none;
     border-top: 1px solid #555;
     margin: 10px 0;
+}
+
+.backend-galton-board .chart-line:hover {
+    color: #ff7f50;
+    font-weight: bold;
+    transition: color 0.3s ease;
 }

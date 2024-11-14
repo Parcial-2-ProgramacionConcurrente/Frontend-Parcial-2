@@ -23,7 +23,7 @@ const GaltonBoard = () => {
     const offsetY = 100;
     const horizontalSpacing = 50;
     const verticalSpacing = 50;
-    const numberOfRows = 10;
+    const numberOfRows = 11;
     const boardWidth = 600;
     const boardHeight = 500;
     const numberOfContainers = numberOfRows + 1;
@@ -88,27 +88,49 @@ const GaltonBoard = () => {
                 const peg = Matter.Bodies.circle(x, y, pegRadius, {
                     isStatic: true,
                     label: 'Peg',
-                    render: { fillStyle: '#000000' },
+                    render: {
+                        fillStyle: '#aaa', // Color gris claro para simular metal
+                        strokeStyle: '#666', // Borde para darle aspecto metálico
+                        lineWidth: 1, // Grosor del borde
+                        shadowBlur: 5, // Efecto de sombra difusa
+                        shadowColor: '#cccccc' // Sombra clara para resaltar
+                    },
                 });
                 Matter.World.add(world, peg);
             }
         }
 
         const containers = [];
+        const containerSpacing = 5; // Aumenta el margen entre contenedores
+
+        // Calcula el ancho total de los contenedores más el espacio entre ellos
+        const totalWidth = numberOfContainers * containerWidth + (numberOfContainers - 1) * containerSpacing;
+
+        // Ajusta initialOffsetX para centrar los contenedores en el tablero
+        const initialOffsetX = offsetX - totalWidth / 2;
+
         for (let i = 0; i < numberOfContainers; i++) {
-            const x = offsetX - boardWidth / 2 + i * (containerWidth + 5) + containerWidth / 2;
+            const x = initialOffsetX + i * (containerWidth + containerSpacing) + containerWidth / 2;
             const y = containerOffsetY;
 
             const container = Matter.Bodies.rectangle(x, y, containerWidth, containerHeight, {
                 isStatic: true,
                 label: `Container_${i}`,
                 render: {
-                    fillStyle: '#000000',
+                    fillStyle: '#333333', // Fondo oscuro para simular profundidad
+                    strokeStyle: '#555555', // Borde más claro para resaltar los bordes
+                    lineWidth: 2, // Grosor del borde
+                    shadowBlur: 8, // Sombra difusa para dar efecto 3D
+                    shadowColor: 'rgba(0, 0, 0, 0.7)' // Sombra oscura para realismo
                 },
             });
             Matter.World.add(world, container);
             containers.push(container);
         }
+
+
+
+
 
         const invisibleFloor = Matter.Bodies.rectangle(
             offsetX,
@@ -191,7 +213,13 @@ const GaltonBoard = () => {
                 restitution: 0.5,
                 friction: 0.005,
                 label: 'Ball',
-                render: { fillStyle: '#ff0000' },
+                render: {
+                    fillStyle: '#ff66b2', // Color vibrante (rosa) para las bolas
+                    strokeStyle: '#ff3399', // Borde un poco más oscuro
+                    lineWidth: 2, // Grosor del borde
+                    shadowBlur: 10, // Sombra difusa más fuerte para dar un efecto de brillo
+                    shadowColor: '#ff99cc' // Color de la sombra
+                },
             });
             Matter.World.add(world, ball);
             ballCount++;
@@ -282,3 +310,4 @@ const GaltonBoard = () => {
 };
 
 export default GaltonBoard;
+
