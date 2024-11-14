@@ -1,9 +1,10 @@
-// src/pages/AdminPage.jsx
 import React, { useContext, useState } from 'react';
 import { registerUser } from '../services/apiService';
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import '/src/styles/Adminpage.css'
+import '/src/styles/Adminpage.css';
+import MessagePanel from '../components/MessagePanel';
+import Nieve from '../components/Nieve'; // Import the Nieve component
 
 function AdminPage() {
     const [nombre, setNombre] = useState('');
@@ -13,16 +14,14 @@ function AdminPage() {
     const [telefono, setTelefono] = useState('');
     const [direccion, setDireccion] = useState('');
     const [password, setPassword] = useState('');
-    const [rolNombre, setRolNombre] = useState('user'); // Valor por defecto para rol
+    const [rolNombre, setRolNombre] = useState('user');
 
-    const { login } = useContext(AuthContext);  // Llamamos login del contexto para autenticación automática
+    const { login, logout } = useContext(AuthContext);
     const navigate = useNavigate();
-
-    const { logout } = useContext(AuthContext);
 
     const handleLogout = () => {
         logout();
-        navigate('/'); // Redirige a la página principal
+        navigate('/');
     };
 
     const handleSubmit = (e) => {
@@ -58,48 +57,55 @@ function AdminPage() {
     };
 
     return (
-        <div className="adminpage">
+        <div className="admin-page">
+            <Nieve /> {/* Add the Nieve component */}
             <h1>Página de Administrador</h1>
-            <button onClick={handleLogout}>Cerrar Sesión</button>
-            <form className="user-form" onSubmit={handleSubmit}>
-                {/* Campos de registro como antes */}
-                <div>
-                    <label>Nombre:</label>
-                    <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} required/>
-                </div>
-                <div>
-                    <label>Primer Apellido:</label>
-                    <input type="text" value={apellido1} onChange={(e) => setApellido1(e.target.value)} required/>
-                </div>
-                <div>
-                    <label>Segundo Apellido:</label>
-                    <input type="text" value={apellido2} onChange={(e) => setApellido2(e.target.value)} required/>
-                </div>
-                <div>
-                    <label>Correo:</label>
-                    <input type="email" value={correo} onChange={(e) => setCorreo(e.target.value)} required/>
-                </div>
-                <div>
-                    <label>Teléfono:</label>
-                    <input type="tel" value={telefono} onChange={(e) => setTelefono(e.target.value)} required/>
-                </div>
-                <div>
-                    <label>Dirección:</label>
-                    <input type="text" value={direccion} onChange={(e) => setDireccion(e.target.value)} required/>
-                </div>
-                <div>
-                    <label>Contraseña:</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-                </div>
-                <div>
-                    <label>Rol:</label>
-                    <select value={rolNombre} onChange={(e) => setRolNombre(e.target.value)}>
-                        <option value="admin">Administrador</option>
-                        <option value="user">Usuario</option>
-                    </select>
-                </div>
-                <button type="submit">Registrar Usuario</button>
-            </form>
+            <button className="button1" onClick={handleLogout}>Cerrar Sesión</button>
+
+            <div className="adminpage-content">
+                {/* Formulario de Registro de Usuario */}
+                <form className="user-form" onSubmit={handleSubmit}>
+                    <div>
+                        <label>Nombre:</label>
+                        <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} required/>
+                    </div>
+                    <div>
+                        <label>Primer Apellido:</label>
+                        <input type="text" value={apellido1} onChange={(e) => setApellido1(e.target.value)} required/>
+                    </div>
+                    <div>
+                        <label>Segundo Apellido:</label>
+                        <input type="text" value={apellido2} onChange={(e) => setApellido2(e.target.value)} required/>
+                    </div>
+                    <div>
+                        <label>Correo:</label>
+                        <input type="email" value={correo} onChange={(e) => setCorreo(e.target.value)} required/>
+                    </div>
+                    <div>
+                        <label>Teléfono:</label>
+                        <input type="tel" value={telefono} onChange={(e) => setTelefono(e.target.value)} required/>
+                    </div>
+                    <div>
+                        <label>Dirección:</label>
+                        <input type="text" value={direccion} onChange={(e) => setDireccion(e.target.value)} required/>
+                    </div>
+                    <div>
+                        <label>Contraseña:</label>
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+                    </div>
+                    <div>
+                        <label>Rol:</label>
+                        <select value={rolNombre} onChange={(e) => setRolNombre(e.target.value)}>
+                            <option value="admin">Administrador</option>
+                            <option value="user">Usuario</option>
+                        </select>
+                    </div>
+                    <button type="submit">Registrar Usuario</button>
+                </form>
+
+                {/* Panel de Mensajes de RabbitMQ */}
+                <MessagePanel />
+            </div>
         </div>
     );
 }
