@@ -1,17 +1,16 @@
-// src/pages/RegisterPage.jsx
 import React, { useState } from 'react';
 import { registerUser } from '../services/apiService';
 import { useNavigate } from 'react-router-dom';
 import '/src/styles/Registerpage.css';
+import Nieve from '../components/Nieve'; // Import the Nieve component
 
 function RegisterPage() {
     const [nombre, setNombre] = useState('');
     const [correo, setCorreo] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState(''); // Estado para el mensaje de error
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
-    // src/pages/RegisterPage.jsx
     const handleRegister = async (e) => {
         e.preventDefault();
         const registerData = {
@@ -24,25 +23,22 @@ function RegisterPage() {
         try {
             await registerUser(registerData);
             alert('Usuario registrado exitosamente');
-            setErrorMessage(''); // Limpiar el mensaje de error en caso de éxito
-            navigate("/login"); // Redirige a la página de inicio de sesión
+            setErrorMessage('');
+            navigate("/login");
         } catch (error) {
             console.error('Error al registrar usuario:', error);
-
-            // Accede al mensaje de error si existe, o asigna un mensaje genérico.
             const backendMessage = (typeof error.response?.data === 'string')
-                ? error.response.data // Si es un string, úsalo directamente
+                ? error.response.data
                 : error.response?.data?.message || 'Error al registrar usuario';
-
             setErrorMessage(backendMessage);
         }
     };
 
-
     return (
         <div className="register-page">
+            <Nieve /> {/* Add the Nieve component */}
             <h1>Registrarse</h1>
-            {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Mostrar el mensaje de error */}
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             <form onSubmit={handleRegister}>
                 <div>
                     <label>Nombre:</label>
@@ -73,6 +69,7 @@ function RegisterPage() {
                 </div>
                 <button type="submit">Registrar</button>
             </form>
+            <button className="button1" onClick={() => navigate('/')}>Home Page</button>
         </div>
     );
 }

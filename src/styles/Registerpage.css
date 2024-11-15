@@ -48,13 +48,14 @@
 }
 
 .register-page input {
-    width: 100%;
+    width: 100%; /* Ajusta este valor según sea necesario */
     padding: 12px;
     border-radius: 5px;
     border: 1px solid #555;
     background-color: #444;
     color: #ffffff;
     font-size: 1rem;
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
 }
 
 .register-page button {
@@ -72,4 +73,24 @@
 
 .register-page button:hover {
     background-color: #e0a800;
+}
+
+/* Estilos para el botón de Home Page */
+.button1 {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff4b5c;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.button1:hover {
+    background-color: #e63946;
 }
