@@ -5,9 +5,7 @@ import axios from 'axios';
 import { api } from '/src/services/apiService.js'; // Importa correctamente
 import '/src/styles/GaltonBoard.css'; // Importar el CSS
 
-
-
-const GaltonBoard = () => {
+const GaltonBoard = ({ onSimulationFinish }) => {
     const sceneRef = useRef(null);
     const engineRef = useRef(Matter.Engine.create());
     const runnerRef = useRef(null);
@@ -128,10 +126,6 @@ const GaltonBoard = () => {
             containers.push(container);
         }
 
-
-
-
-
         const invisibleFloor = Matter.Bodies.rectangle(
             offsetX,
             offsetY + boardHeight + containerHeight + 100,
@@ -225,11 +219,11 @@ const GaltonBoard = () => {
             ballCount++;
         }, dropInterval);
 
-
         const fetchDistributionFromBackend = async (galtonBoardId) => {
             try {
                 const response = await axios.post(`/api/galtonboard/mostrarDistribucion?galtonBoardId=${galtonBoardId}`);
                 setDistribution(response.data);
+                onSimulationFinish(response.data); // Llama al callback con la distribución
             } catch (error) {
                 console.error('Error fetching distribution from backend:', error);
             }
@@ -263,8 +257,6 @@ const GaltonBoard = () => {
 
         setTimeout(cleanup, maxBalls * dropInterval + 5000);
     };
-
-
 
     return (
         <div className="galton-board-container">
@@ -310,4 +302,3 @@ const GaltonBoard = () => {
 };
 
 export default GaltonBoard;
-
